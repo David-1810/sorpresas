@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regalos para MAYU</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #f8e1f4, #e5c9f2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        /* Fondo animado permanente */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://i.ibb.co/7GNbK3v/corazon.png');
+            /* Puedes usar tu propia imagen */
+            background-repeat: repeat;
+            background-size: 40px;
+            opacity: 0.05;
+            animation: moverFondo 60s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes moverFondo {
+            from {
+                background-position: 0 0;
+            }
+
+            to {
+                background-position: 1000px 1000px;
+            }
+        }
+
+        /* Animación para regalo abierto */
+        @keyframes estrellitas {
+            0% {
+                transform: scale(0.5) translateY(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1.5) translateY(-100px);
+                opacity: 0;
+            }
+        }
+
+        /* Animación especial para el regalo sorpresa */
+        @keyframes corazonesExplosivos {
+            0% {
+                transform: scale(0.8);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+
+        .efecto-estrellas,
+        .efecto-corazones {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        h1 {
+            color: #8e44ad;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        #contador {
+            background: #fff0fb;
+            border: 2px dashed #d77be2;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            color: #8e44ad;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .contenedor-regalos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .regalo {
+            font-size: 2.5rem;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            z-index: 2;
+        }
+
+        .regalo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+        }
+
+        .abierto {
+            background-color: #ffffff;
+            color: #af7ac5;
+            font-weight: bold;
+            border: 2px solid #af7ac5;
+            border-radius: 15px;
+            padding: 1rem;
+            font-size: 2.5rem;
+            box-shadow: 0 4px 14px rgba(175, 122, 197, 0.4);
+            text-align: center;
+            pointer-events: none;
+            position: relative;
+            z-index: 2;
+        }
+
+        .oculto {
+            display: none;
+        }
+
+        #popupMensaje {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            display: none;
+            max-width: 90%;
+            text-align: center;
+            color: #6a1b9a;
+            font-size: 1.2rem;
+        }
+
+        #popupMensaje.mostrar {
+            display: block;
+        }
+
+        #fondoOscuro {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.4);
+            display: none;
+            z-index: 5;
+        }
+
+        #fondoOscuro.visible {
+            display: block;
+        }
+
+        @keyframes parpadeo {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .destacar {
+            animation: parpadeo 1s infinite;
+        }
+
+        /* Corazones flotantes animados */
+        .corazon-flotante {
+            position: fixed;
+            bottom: -20px;
+            font-size: 24px;
+            color: #E91E63;
+            animation: flotar 6s linear forwards;
+            opacity: 0.8;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes flotar {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(-100vh) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        #regalo-sorpresa {
+            grid-column: span 2;
+            grid-row: span 2;
+            font-size: 4rem;
+            padding: 2rem;
+        }
+
+        #feedbackFinal {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #fff0fb;
+            border: 2px dashed #d77be2;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        #feedbackFinal h2 {
+            color: #8e44ad;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        #feedbackFinal textarea {
+            width: 90%;
+            height: 100px;
+            padding: 1rem;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            border-radius: 10px;
+            border: 1px solid #d9a6e1;
+            resize: none;
+            margin-bottom: 1rem;
+        }
+
+        #feedbackFinal button {
+            background-color: #af7ac5;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        #feedbackFinal button:hover {
+            background-color: #9b59b6;
+        }
+
+        .boton-regalo {
+            margin: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            background-color: #e8daef;
+            color: #6a1b9a;
+            transition: all 0.2s ease;
+        }
+
+        .boton-regalo:hover {
+            background-color: #d2b4de;
+        }
+
+        .boton-regalo.seleccionado {
+            background-color: #d7bde2 !important;
+            box-shadow: 0 4px 10px rgba(143, 98, 179, 0.4);
+            transform: scale(1.05);
+        }
+
+
+        @media (max-width: 500px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .regalo {
+                font-size: 2rem;
+                padding: 0.8rem;
+            }
+
+            .abierto {
+                font-size: 2rem;
+                padding: 0.8rem;
+            }
+
+            #popupMensaje {
+                width: 90%;
+                max-width: 90%;
+                padding: 1.5rem 1.2rem;
+                font-size: 1.05rem;
+            }
+
+            #popupMensaje textarea {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🎁 Sorpresas Para MAYU, La Reina De Mis Pensamientos Más Bonitos💘</h1>
+    <div id="contador">⏳ Cargando...</div>
+    <div id="contadorSorpresa" style="display: none;">🎇 Cargando regalo sorpresa...</div>
+
+    <div class="contenedor-regalos">
+        <div class="regalo" data-id="1">🎁</div>
+        <div class="regalo" data-id="2">🎁</div>
+        <div class="regalo" data-id="3">🎁</div>
+        <div class="regalo" data-id="4">🎁</div>
+        <div class="regalo oculto" data-id="5" id="regalo-sorpresa">🎁?</div>
+    </div>
+
+    <div id="feedbackFinal" class="oculto">
+        <h2>💬 ¿Te gustaron los regalos?</h2>
+        <textarea id="sentimientoFinal" placeholder="Escribe aquí lo que sentiste al abrirlos... ✍️"></textarea>
+        <button onclick="enviarFeedback()">Enviar respuesta</button>
+    </div>
+
+
+    <div id="popupMensaje">
+        <div id="contenidoMensaje"></div>
+    </div>
+    <div id="fondoOscuro"></div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+    <script>
+
+        let intervaloEmojisSorpresa = null;
+
+        function crearCorazonFlotante() {
+            const emojis = ['❤️', '💖', '💘', '💝', '💗', '💞'];
+            const corazon = document.createElement('div');
+            corazon.classList.add('corazon-flotante');
+            corazon.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+            corazon.style.left = Math.random() * 100 + 'vw';
+            corazon.style.fontSize = (16 + Math.random() * 20) + 'px';
+            document.body.appendChild(corazon);
+            setTimeout(() => corazon.remove(), 6000);
+        }
+
+        setInterval(() => {
+            for (let i = 0; i < 4; i++) {
+                crearCorazonFlotante();
+            }
+        }, 700); // muchos corazones constantemente
+        // cada 500ms lanza 3 corazones
+
+        function crearEmojiSorpresaFlotante() {
+            const emojis = ['🎁', '🫣', '🎉', '🎀', '✨'];
+            const emoji = document.createElement('div');
+            emoji.classList.add('corazon-flotante');
+            emoji.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+            emoji.style.left = Math.random() * 100 + 'vw';
+            emoji.style.fontSize = (20 + Math.random() * 25) + 'px';
+            document.body.appendChild(emoji);
+            setTimeout(() => emoji.remove(), 6000);
+        }
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCIsuPHYYhxQYbz5zTJZyr63xJ100shyoo",
+            authDomain: "prueba-5a28c.firebaseapp.com",
+            projectId: "prueba-5a28c",
+            storageBucket: "prueba-5a28c.firebasestorage.app",
+            messagingSenderId: "1003817153957",
+            appId: "1:1003817153957:web:aa74e747452f1fe361a44c"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        const nombreUsuario = "MAYU";
+        const DURACION_BLOQUEO_MS = 3 * 60 * 60 * 1000;
+        const ESPERA_SORPRESA_MS = 1 * 60 * 60 * 1000;
+
+        let tipoBloqueo = "normal"; // "normal", "sorpresa", "ninguno"
+        let tiempoRestanteBloqueo = 0;
+
+        const contadorDiv = document.getElementById("contador");
+        const regalos = document.querySelectorAll(".regalo");
+        const regaloSorpresa = document.getElementById("regalo-sorpresa");
+
+        const contenidoMensaje = document.getElementById("contenidoMensaje");
+        const popup = document.getElementById("popupMensaje");
+        const fondoOscuro = document.getElementById("fondoOscuro");
+
+        const mensajesOrdenados = [
+            "Te voy a regalar una chocolatina 🍫... pero solo si me das una sonrisa a cambio 😋",
+            "Te tengo guardado un beso en la frente 😘... de esos que sanan el alma y te hacen suspirar 💆‍♀️💜",
+            "Te voy a abrazar tan fuerte 🤗... que hasta los miedos se van a derretir 💞",
+            "Te quiero dar unas flores 🌸... pero no cualquieras, ¡Las más bonitas, como tú! 🌷🥰",
+            "¡Tarán! Te voy a llevar a comer arroz chino 🍱... pero con una condición: y es que te enamores un poquito de mí con cada bocado 😘💕 Y si ya lo estás (aunque sea solo un poquito) prepárate... porque apenas estoy comenzando y prometo que no te voy a defraudarte 😏💜"
+        ];
+
+
+        const iconosAbiertos = ["💌", "🎀", "🎉", "💝", "🎇"];
+        const nombresRegalos = [
+            "El Primer Regalo",
+            "El Segundo Regalo",
+            "El Tercer Regalo",
+            "El Cuarto Regalo",
+            "El Regalo Sorpresa"
+        ];
+
+        function mostrarPopup(mensaje, incluirPregunta = false, idRegalo = null, orden = null) {
+            // Limpiar todo el contenido previo del popup
+            popup.innerHTML = "";
+            const contenidoMensaje = document.createElement("div");
+            contenidoMensaje.id = "contenidoMensaje";
+            popup.appendChild(contenidoMensaje);
+
+            const tituloRegalo = document.createElement("h2");
+            tituloRegalo.textContent = "🎁 Tu regalo es:";
+            tituloRegalo.style.color = "#8e44ad";
+            tituloRegalo.style.marginBottom = "0.8rem";
+            tituloRegalo.style.fontSize = "1.3rem";
+            tituloRegalo.style.fontWeight = "bold";
+            contenidoMensaje.appendChild(tituloRegalo);
+
+            const mensajeP = document.createElement("p");
+            mensajeP.textContent = mensaje;
+            mensajeP.style.fontSize = "1.1rem";
+            mensajeP.style.marginBottom = "1rem";
+            contenidoMensaje.appendChild(mensajeP);
+
+            if (incluirPregunta && idRegalo && orden !== null) {
+                const contenedor = document.createElement("div");
+                contenedor.id = "bloque-pregunta";
+                contenedor.style.marginTop = "1.5rem";
+                contenedor.style.textAlign = "center";
+
+                const pregunta = document.createElement("p");
+                pregunta.textContent = "¿Te gustó este regalo?";
+                pregunta.style.fontWeight = "bold";
+                pregunta.style.color = "#8e44ad";
+                contenedor.appendChild(pregunta);
+
+                const botonesDiv = document.createElement("div");
+                botonesDiv.style.marginBottom = "1rem";
+
+                function crearBoton(texto, id) {
+                    const btn = document.createElement("button");
+                    btn.textContent = texto;
+                    btn.id = id;
+                    btn.className = "boton-regalo";
+                    return btn;
+                }
+
+                const btnSi = crearBoton("Sí 😊", "btnSi");
+                const btnNo = crearBoton("No 😢", "btnNo");
+
+                botonesDiv.appendChild(btnSi);
+                botonesDiv.appendChild(btnNo);
+                contenedor.appendChild(botonesDiv);
+
+                const mensajeError = document.createElement("p");
+                mensajeError.id = "mensajeError";
+                mensajeError.style.color = "#e74c3c";
+                mensajeError.style.fontSize = "0.95rem";
+                mensajeError.style.marginTop = "0.3rem";
+                mensajeError.style.display = "none";
+                mensajeError.textContent = "Por favor, elige si te gustó el regalo 😊";
+                contenedor.appendChild(mensajeError);
+
+                const textarea = document.createElement("textarea");
+                textarea.id = "comentarioRegalo";
+                textarea.placeholder = "¿Qué piensas o sientes sobre este regalo? ✍️";
+                textarea.rows = 3;
+                textarea.style.width = "90%";
+                textarea.style.borderRadius = "10px";
+                textarea.style.padding = "0.7rem";
+                textarea.style.border = "1px solid #d9a6e1";
+                textarea.style.marginBottom = "1rem";
+                textarea.style.fontFamily = "'Quicksand', sans-serif";
+                contenedor.appendChild(textarea);
+
+                const enviarBtn = document.createElement("button");
+                enviarBtn.textContent = "Enviar respuesta";
+                enviarBtn.id = "btnEnviarFeedback";
+                enviarBtn.style.marginTop = "1rem";
+                enviarBtn.style.backgroundColor = "#af7ac5";
+                enviarBtn.style.color = "white";
+                enviarBtn.style.border = "none";
+                enviarBtn.style.padding = "0.7rem 1.5rem";
+                enviarBtn.style.borderRadius = "10px";
+                enviarBtn.style.cursor = "pointer";
+                enviarBtn.style.fontSize = "1rem";
+                enviarBtn.addEventListener("mouseenter", () => enviarBtn.style.backgroundColor = "#9b59b6");
+                enviarBtn.addEventListener("mouseleave", () => enviarBtn.style.backgroundColor = "#af7ac5");
+
+                contenedor.appendChild(enviarBtn);
+                contenidoMensaje.appendChild(contenedor);
+
+                // Lógica de interacción
+                let respuesta = null;
+
+                btnSi.addEventListener("click", () => {
+                    respuesta = "Sí";
+                    btnSi.classList.add("seleccionado");
+                    btnNo.classList.remove("seleccionado");
+                    mensajeError.style.display = "none";
+
+                });
+
+                btnNo.addEventListener("click", () => {
+                    respuesta = "No";
+                    btnNo.classList.add("seleccionado");
+                    btnSi.classList.remove("seleccionado");
+                    mensajeError.style.display = "none";
+
+                });
+
+                enviarBtn.addEventListener("click", async () => {
+                    const comentario = textarea.value.trim();
+                    if (!respuesta) {
+                        mensajeError.style.display = "block"; // Mostrar mensaje
+                        return;
+                    }
+
+                    mensajeError.style.display = "none"; // Ocultar si ya eligió
+
+                    const { fecha, hora, timestamp } = obtenerFechaYHora();
+                    const nombreDocumento = nombresRegalos[orden] || `Regalo ${orden + 1}`;
+
+                    await db.collection("regalos").doc(nombreDocumento).set({
+                        nombre: nombreUsuario,
+                        regalo: idRegalo,
+                        contenido: mensaje,
+                        fecha,
+                        hora,
+                        timestamp,
+                        gusto: respuesta,
+                        opinion: comentario
+                    });
+
+                    cerrarPopup();
+                    marcarAbierto(idRegalo, orden);
+                });
+
+            } else {
+                // Botón de cerrar siempre visible (opcional: solo si no hay pregunta)
+                const cerrarBtn = document.createElement("span");
+                cerrarBtn.textContent = "✖";
+                cerrarBtn.style.position = "absolute";
+                cerrarBtn.style.top = "12px";
+                cerrarBtn.style.right = "18px";
+                cerrarBtn.style.cursor = "pointer";
+                cerrarBtn.style.fontSize = "1.3rem";
+                cerrarBtn.style.color = "#8e44ad";
+                cerrarBtn.style.fontWeight = "bold";
+                cerrarBtn.style.zIndex = "10";
+                cerrarBtn.addEventListener("click", cerrarPopup);
+                popup.appendChild(cerrarBtn);
+            }
+
+            popup.classList.add("mostrar");
+            fondoOscuro.classList.add("visible");
+        }
+
+
+
+
+
+        function cerrarPopup() {
+            popup.classList.remove("mostrar");
+            fondoOscuro.classList.remove("visible");
+        }
+
+        function marcarAbierto(id, ordenApertura = null) {
+            const elem = document.querySelector(`[data-id="${id}"]`);
+            if (elem) {
+                const icono = ordenApertura !== null ? iconosAbiertos[ordenApertura] || "🎁" : "🎁";
+                elem.textContent = icono;
+                elem.classList.add("abierto");
+                elem.classList.remove("regalo");
+            }
+        }
+
+        function obtenerFechaYHora() {
+            const ahora = new Date();
+            const fecha = ahora.toISOString().split("T")[0];
+            const hora = ahora.toTimeString().split(" ")[0];
+            return { fecha, hora, timestamp: ahora.getTime() };
+        }
+
+        function actualizarContador(restante) {
+            if (restante <= 0) {
+                contadorDiv.textContent = "✅ Puedes abrir un regalo ahora";
+                return;
+            }
+
+            const horas = Math.floor(restante / (1000 * 60 * 60));
+            const minutos = Math.floor((restante % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((restante % (1000 * 60)) / 1000);
+
+            if (tipoBloqueo === "sorpresa") {
+                contadorDiv.textContent = `🎇 El Regalo Sorpresa estará disponible en ${horas}h ${minutos}m ${segundos}s`;
+            } else {
+                contadorDiv.textContent = `⏳ Puedes abrir otro regalo en ${horas}h ${minutos}m ${segundos}s`;
+            }
+        }
+
+        function iniciarContador(restanteInicial) {
+            let restante = restanteInicial;
+            actualizarContador(restante);
+            const intervalo = setInterval(() => {
+                restante -= 1000;
+                if (restante <= 0) {
+                    clearInterval(intervalo);
+                    actualizarContador(0);
+                } else {
+                    actualizarContador(restante);
+                }
+            }, 1000);
+        }
+
+        async function obtenerHistorial() {
+            const snapshot = await db.collection("regalos").orderBy("timestamp", "asc").get();
+            const historial = [];
+            snapshot.forEach(doc => historial.push({ id: doc.id, data: doc.data() }));
+            return historial;
+        }
+
+        async function verificarEstado() {
+            const historial = await obtenerHistorial();
+            const abiertos = historial.map(item => parseInt(item.data.regalo));
+
+            historial.forEach((item, index) => {
+                marcarAbierto(item.data.regalo, index);
+            });
+
+            if (abiertos.includes(5)) {
+                document.getElementById("contador").style.display = "none";
+                document.getElementById("contadorSorpresa").style.display = "none";
+            }
+
+
+            const abiertosPrincipales = historial.filter(item => [1, 2, 3, 4].includes(parseInt(item.data.regalo)));
+
+            if ([1, 2, 3, 4].every(num => abiertos.includes(num))) {
+                regaloSorpresa.classList.remove("oculto");
+                regaloSorpresa.classList.add("destacar");
+
+                if (!intervaloEmojisSorpresa) {
+                    intervaloEmojisSorpresa = setInterval(() => {
+                        for (let i = 0; i < 3; i++) {
+                            crearEmojiSorpresaFlotante();
+                        }
+                    }, 500);
+                }
+
+                const masReciente = Math.max(...abiertosPrincipales.map(item => item.data.timestamp));
+                const transcurridoSorpresa = Date.now() - masReciente;
+
+                if (!abiertos.includes(5)) {
+                    if (transcurridoSorpresa < ESPERA_SORPRESA_MS) {
+                        tipoBloqueo = "sorpresa";
+                        tiempoRestanteBloqueo = ESPERA_SORPRESA_MS - transcurridoSorpresa;
+                        iniciarContador(tiempoRestanteBloqueo);
+                        return { bloqueado: true, ultimoId: null };
+                    } else {
+                        tipoBloqueo = "ninguno";
+                        actualizarContador(0);
+                    }
+                }
+            }
+
+            // Verificar si ya se envió feedback
+            const feedbackDoc = await db.collection("regalos").doc("Te Gustaron Los Regalos").get();
+            if (feedbackDoc.exists && feedbackDoc.data().respondido) {
+                mostrarMensajeAgradecimiento();
+                return { bloqueado: true }; // ❌ Evita mostrar contadores ni permitir más acciones
+            }
+
+            // 👉 Mueve esta verificación fuera del if
+            if ([1, 2, 3, 4, 5].every(num => abiertos.includes(num))) {
+                document.getElementById("feedbackFinal").classList.remove("oculto");
+            }
+
+            if (historial.length > 0) {
+                const ultimo = historial[historial.length - 1].data;
+                const transcurrido = Date.now() - ultimo.timestamp;
+
+                if (transcurrido < DURACION_BLOQUEO_MS) {
+                    tipoBloqueo = "normal";
+                    tiempoRestanteBloqueo = DURACION_BLOQUEO_MS - transcurrido;
+                    iniciarContador(tiempoRestanteBloqueo);
+                    return { bloqueado: true, ultimoId: ultimo.regalo };
+                }
+            }
+
+
+
+
+            tipoBloqueo = "ninguno";
+            actualizarContador(0);
+            return { bloqueado: false };
+        }
+
+        async function manejarClick(id) {
+            const historial = await obtenerHistorial();
+            const abiertos = historial.map(item => parseInt(item.data.regalo));
+            const yaAbierto = abiertos.includes(parseInt(id));
+
+            // Verificar si regalo sorpresa está bloqueado
+            if (parseInt(id) === 5 && !yaAbierto) {
+                const regalos14 = historial.filter(item => [1, 2, 3, 4].includes(parseInt(item.data.regalo)));
+                const masReciente = Math.max(...regalos14.map(item => item.data.timestamp));
+                const transcurrido = Date.now() - masReciente;
+
+                if (transcurrido < ESPERA_SORPRESA_MS) {
+                    const restante = ESPERA_SORPRESA_MS - transcurrido;
+                    const horas = Math.floor(restante / (1000 * 60 * 60));
+                    const minutos = Math.floor((restante % (1000 * 60 * 60)) / (1000 * 60));
+                    const segundos = Math.floor((restante % (1000 * 60)) / 1000);
+                    mostrarPopup(`🎇 El regalo secreto estará disponible en ${horas}h ${minutos}m ${segundos}s`);
+                    return;
+                }
+            }
+
+            const estado = await verificarEstado();
+
+            if (estado.bloqueado) {
+                const indexUltimo = historial.findIndex(item => item.data.regalo == id);
+                if (estado.ultimoId == id && indexUltimo !== -1) {
+                    mostrarPopup(historial[indexUltimo].data.contenido);
+                } else {
+                    mostrarPopup("⏳ Aún no puedes abrir otro regalo. Espera que el contador llegue a cero.");
+                }
+            } else {
+                if (!yaAbierto) {
+                    const orden = historial.length;
+                    const mensajeMostrado = mensajesOrdenados[orden] || "🌟 Sorpresa especial 🌟";
+                    const nombreDocumento = nombresRegalos[orden] || `Regalo ${orden + 1}`;
+                    const { fecha, hora, timestamp } = obtenerFechaYHora();
+
+                    await db.collection("regalos").doc(nombreDocumento).set({
+                        nombre: nombreUsuario,
+                        regalo: id,
+                        contenido: mensajeMostrado,
+                        fecha,
+                        hora,
+                        timestamp
+                    });
+
+                    marcarAbierto(id, orden);
+                    mostrarPopup(mensajeMostrado, true, parseInt(id), orden);
+                    lanzarAnimacion(parseInt(id) === 5 ? "sorpresa" : "normal");
+
+                    // ✅ Si se abre el regalo sorpresa, detener lluvia especial
+                    if (parseInt(id) === 5 && intervaloEmojisSorpresa) {
+                        clearInterval(intervaloEmojisSorpresa);
+                        intervaloEmojisSorpresa = null;
+                        // ✅ Ocultar contadores cuando se abre el regalo sorpresa
+                        document.getElementById("contador").style.display = "none";
+                        document.getElementById("contadorSorpresa").style.display = "none";
+                        document.getElementById("feedbackFinal").classList.remove("oculto");
+                    }
+
+
+
+                    // ✅ Verificamos si los regalos 1-4 ya están todos abiertos
+                    const regalosActualizados = [...abiertos, parseInt(id)];
+                    if ([1, 2, 3, 4].every(num => regalosActualizados.includes(num))) {
+                        regaloSorpresa.classList.remove("oculto");
+                        regaloSorpresa.classList.add("destacar");
+
+                        // ⏳ Calculamos bloqueo de sorpresa en tiempo real
+                        const masReciente = Date.now(); // acabamos de guardar el actual
+                        const restante = ESPERA_SORPRESA_MS;
+
+                        tipoBloqueo = "sorpresa";
+                        tiempoRestanteBloqueo = restante;
+                        iniciarContador(restante);
+                    } else {
+                        // ⏱ Si no es regalo sorpresa, aplica el contador de 3h normal
+                        tipoBloqueo = "normal";
+                        tiempoRestanteBloqueo = DURACION_BLOQUEO_MS;
+                        iniciarContador(DURACION_BLOQUEO_MS);
+                    }
+                } else {
+                    mostrarPopup("Ya abriste este regalo antes 🎁");
+                }
+            }
+        }
+
+        function lanzarAnimacion(tipo = "normal") {
+            const div = document.createElement("div");
+            div.className = tipo === "sorpresa" ? "efecto-corazones" : "efecto-estrellas";
+            div.textContent = tipo === "sorpresa" ? "💖💖💖" : "✨✨✨";
+            document.body.appendChild(div);
+
+            div.style.animation = tipo === "sorpresa" ? "corazonesExplosivos 1.2s ease-out forwards" : "estrellitas 1s ease-out forwards";
+
+            setTimeout(() => {
+                div.remove();
+            }, 1500);
+        }
+
+        regalos.forEach((regalo) => {
+            const id = regalo.getAttribute("data-id");
+            regalo.addEventListener("click", () => manejarClick(id));
+        });
+
+        async function enviarFeedback() {
+            const texto = document.getElementById("sentimientoFinal").value.trim();
+
+            if (!texto) {
+                alert("Por favor, escribe algo antes de enviar 💌");
+                return;
+            }
+
+            const { fecha, hora, timestamp } = obtenerFechaYHora();
+
+            await db.collection("regalos").doc("Te Gustaron Los Regalos").set({
+                nombre: nombreUsuario,
+                tipo: "feedback",
+                mensaje: texto,
+                fecha,
+                hora,
+                timestamp,
+                respondido: true // ✅ Campo nuevo
+            });
+
+            mostrarMensajeAgradecimiento();
+        }
+
+        function mostrarMensajeAgradecimiento() {
+            const feedbackDiv = document.getElementById("feedbackFinal");
+            feedbackDiv.classList.remove("oculto");
+
+            // Cambia TODO el contenido del div
+            feedbackDiv.innerHTML = `
+        <h2>🥰 ¡Muchas gracias por compartir lo que sentiste! 💜</h2>
+    `;
+
+            // Oculta contadores
+            document.getElementById("contador").style.display = "none";
+            document.getElementById("contadorSorpresa").style.display = "none";
+
+            // Detiene lluvia de emojis sorpresa si sigue activa
+            if (intervaloEmojisSorpresa) {
+                clearInterval(intervaloEmojisSorpresa);
+                intervaloEmojisSorpresa = null;
+            }
+
+            // Cierra popup si hay uno abierto
+            cerrarPopup();
+        }
+
+
+
+        verificarEstado();
+    </script>
+
+
+</body>
+
+</html>
